@@ -574,9 +574,8 @@ H5PEditor.widgets.hotspoticon = (function ($) {
 
   HotspotIcon.prototype.updateHotspotsData = function () {
     const self = this;
-    self.setValue(self.field, self.params)
+    self.setValue(self.field, self.params);
     self.renderHotspotList();
-
   }
 
   HotspotIcon.prototype.addHotspot = function () {

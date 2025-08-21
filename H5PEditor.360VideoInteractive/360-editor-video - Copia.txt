@@ -40,7 +40,7 @@ H5PEditor.widgets.video360player = (function ($) {
     self.dynamicTimeHandlers = {};
     self.lastInterpolationKeyframesMap = {};
 
-    self._anchorTrackers = {};   // hotspotId -> { tracker, rafId, lastBox, meshName }
+    // self._anchorTrackers = {};
     // Global access to THREE.js
     if (typeof THREE !== undefined) window.THREE = THREE;
 
@@ -402,7 +402,7 @@ H5PEditor.widgets.video360player = (function ($) {
       yaw,
       pitch
     });
-    self.startAnchorTracking(hotspot.id, yaw, pitch);
+    //self.startAnchorTracking(hotspot.id, yaw, pitch);
   }
 
   /**
@@ -503,12 +503,8 @@ H5PEditor.widgets.video360player = (function ($) {
     const marker = `hotspot_marker_${id}`;
     const existing = scene.getObjectByName(marker);
     if (existing) scene.remove(existing);
-    self.stopAnchorTracking(id);
+    // self.stopAnchorTracking(id);
   }
-
-  Video360Player.prototype.saveParams = function () {
-    this.setValue(this.field, this.params || {});
-  };
 
   /**
    * Remove keyframe marker
@@ -637,11 +633,10 @@ H5PEditor.widgets.video360player = (function ($) {
    * @returns {boolean}
    */
   Video360Player.prototype.validate = function () {
-    this.saveParams();
     return true;
   }
 
-  Video360Player.prototype.startAnchorTracking = async function (hotspotId, yawDeg, pitchDeg) {
+  /*Video360Player.prototype.startAnchorTracking = async function (hotspotId, yawDeg, pitchDeg) {
     const self = this;
     if (!self.player?.vr?.() || !self.vrComponentsReady) return;
 
@@ -727,6 +722,13 @@ H5PEditor.widgets.video360player = (function ($) {
         return new Promise(res => { s2.onload = res; document.head.appendChild(s2); });
       }
     });
+  }
+
+  function l2NormalizeManual(tensor, axis) {
+    const epsilon = 1e-10;
+    const squareSum = tf.sum(tf.square(tensor), axis, true);
+    const invNorm = tf.rsqrt(tf.maximum(squareSum, epsilon));
+    return tf.mul(tensor, invNorm);
   }
 
   // Tracker leggero: MobileNet feature + correlazione su search crop, con wrap 360
@@ -822,13 +824,6 @@ H5PEditor.widgets.video360player = (function ($) {
       return feat;
     }
 
-    l2NormalizeManual(tensor, axis) {
-      const epsilon = 1e-10;
-      const squareSum = tf.sum(tf.square(tensor), axis, true);
-      const invNorm = tf.rsqrt(tf.maximum(squareSum, epsilon));
-      return tf.mul(tensor, invNorm);
-    }
-
     async _xcorr(searchCanvas, templateFeat) {
       // Griglia di patch 17x17 su 320x320
       const GRID = 17;
@@ -842,11 +837,11 @@ H5PEditor.widgets.video360player = (function ($) {
           centers.push({ x: gx * stepX, y: gy * stepY });
         }
       }
-
+      var input;
       const batchSize = 16;
       for (let i = 0; i < centers.length; i += batchSize) {
         const batch = centers.slice(i, i + batchSize);
-        const input = tf.tidy(() => {
+        input = tf.tidy(() => {
           const ts = batch.map(pt => {
             const patch = this._cropCanvas(searchCanvas, pt.x, pt.y, 160, 160);
             const img = tf.browser.fromPixels(patch);
@@ -857,6 +852,7 @@ H5PEditor.widgets.video360player = (function ($) {
           });
           return tf.concat(ts, 0);
         });
+        const feats = this.model.infer(input, { embedding: true }); // <-- questa riga mancava
         const featsNorm = l2NormalizeManual(feats, -1);
         const tplNorm = l2NormalizeManual(templateFeat, -1);
 
@@ -923,7 +919,7 @@ H5PEditor.widgets.video360player = (function ($) {
       ctx.drawImage(sourceCanvas, sx, sy, w, h, 0, 0, w, h);
       return c;
     }
-  }
+  }*/
 
   return Video360Player;
 })(H5P.jQuery);

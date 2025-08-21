@@ -3,7 +3,7 @@
   "machineName": "H5P.Video360Interactive",
   "majorVersion": 1,
   "minorVersion": 0,
-  "patchVersion": 20,
+  "patchVersion": 37,
   "runnable": 1,
   "author": "Jonathan Casadei",
   "license": "MIT",
@@ -47,6 +47,31 @@
     },
     {
       "machineName": "H5P.Components",
+      "majorVersion": 1,
+      "minorVersion": 0
+    },
+    {
+      "machineName": "H5P.Image",
+      "majorVersion": 1,
+      "minorVersion": 1
+    },
+    {
+      "machineName": "H5P.Text",
+      "majorVersion": 1,
+      "minorVersion": 1
+    },
+    {
+      "machineName": "H5P.Table",
+      "majorVersion": 1,
+      "minorVersion": 2
+    },
+    {
+      "machineName": "H5P.Link",
+      "majorVersion": 1,
+      "minorVersion": 3
+    },
+    {
+      "machineName": "H5P.Nil",
       "majorVersion": 1,
       "minorVersion": 0
     }

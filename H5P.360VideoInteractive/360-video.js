@@ -2,34 +2,58 @@ H5P.Video360Interactive = (function ($, EventDispatcher) {
 
   function V360Interactive(params, id, extras) {
     const self = this;
-    console.group('💾 [Runnable] Debug params caricati');
-    console.log('params completi:', params);
-    if (params.interactionSettings) {
-      console.log('interactionSettings:', params.interactionSettings);
-      if (params.interactionSettings.addHotspot) {
-        console.log('addHotspot:', params.interactionSettings.addHotspot);
-        console.log('Hotspots array:', params.interactionSettings.addHotspot.hotspots);
-      } else {
-        console.warn('⚠ Nessun addHotspot nei params');
-      }
-    } else {
-      console.warn('⚠ Nessun interactionSettings nei params');
-    }
-    console.groupEnd();
     EventDispatcher.call(self);
+    console.log(params);
 
     self.params = params || {};
     self.id = id;
+
+    // 🔥 Inizializza hotspots di test scritti a mano
+    this.hotspots = [
+      {
+        id: 1,
+        hotspotType: 'static',
+        yaw: 180,           // gradi
+        pitch: 0,         // gradi
+        displayStartTime: 1,
+        displayEndTime: 15,
+        positioned: true,
+        type: {
+          library: 'H5P.Table 1.2',  // ← aggiornata alla libreria tabella
+          params: {
+            table: [
+              ['Colonna 1', 'Colonna 2'],
+              ['Riga 1 - cella 1', 'Riga 1 - cella 2'],
+              ['Riga 2 - cella 1', 'Riga 2 - cella 2']
+            ]
+          }
+        }
+      },
+      {
+        id: 2,
+        hotspotType: 'dynamic',
+        keyframes: [
+          { time: 0, yaw: 0, pitch: 0, positioned: true },
+          { time: 5, yaw: 45, pitch: 10, positioned: true },
+          { time: 10, yaw: 90, pitch: 0, positioned: true }
+        ],
+        interpolated: true,
+        type: {
+          library: 'H5P.Text 1.1',
+          params: { text: 'Hotspot dinamico di prova' }
+        }
+      }
+    ];
+
     self.player = null;
     self.$wrapper = null;
     self.hotspotsContent = {};
     self.dynamicHotspots = {};
     self.hotspotMeshes = {};
-    self.$activeOverlay = null; 
-
-    self.hotspots = params?.interactionSettings?.addHotspot?.hotspots || [];
-    console.log("🔥 Hotspots caricati dal runnable:", self.hotspots);
-    if (typeof THREE !== undefined) window.THREE = THREE;
+    self.$activeOverlay = null;
+    self.raycaster = new THREE.Raycaster();
+    self.mouse = new THREE.Vector2();
+    self.$domElement = null;
   }
 
   V360Interactive.prototype.attach = function ($container) {
@@ -92,10 +116,37 @@ H5P.Video360Interactive = (function ($, EventDispatcher) {
     }
 
     self.player.on('ready', () => {
-      self.loadHotspots();
-      self.player.on('timeupdate', self.handleHotspotVisibility.bind(self));
-      self.player.on('timeupdate', self.handleDynamicHotspotInterpolation.bind(self));
+      // Polling finché VR è pronto
+      const waitForVR = () => {
+        const vr = self.player.vr && self.player.vr();
+        if (vr && vr.scene && vr.renderer && vr.renderer.domElement) {
+          console.log("VR pronto ✅");
+          // Salva il domElement per il Raycaster
+          self.$domElement = vr.renderer.domElement;
+
+          // Aggiungi qui eventuali listener per Raycaster
+          self.$domElement.addEventListener('click', (event) => {
+            self.handleRaycastEvent(event, 'click');
+          });
+          self.$domElement.addEventListener('mousemove', (event) => {
+            self.handleRaycastEvent(event, 'hover');
+          });
+
+          // Ora possiamo caricare gli hotspot in sicurezza
+          self.loadHotspots();
+
+          // Avvia il tracking di visibilità/interpolazione
+          self.player.on('timeupdate', self.handleHotspotVisibility.bind(self));
+          self.player.on('timeupdate', self.handleDynamicHotspotInterpolation.bind(self));
+        } else {
+          // Riprova al prossimo frame
+          requestAnimationFrame(waitForVR);
+        }
+      };
+
+      waitForVR();
     });
+
 
     self.player.on('play', () => {
       self.player.controls(true);
@@ -109,8 +160,16 @@ H5P.Video360Interactive = (function ($, EventDispatcher) {
 
   V360Interactive.prototype.loadHotspots = function () {
     const self = this;
+
+    const vrInstance = self.player.vr && self.player.vr();
+    if (!vrInstance || !vrInstance.scene) {
+      console.warn('VR scene non disponibile ancora, riprovo più tardi…');
+      setTimeout(() => self.loadHotspots(), 100); // riprova fra 100ms
+      return;
+    }
+    const scene = vrInstance.scene;
+    // 🔹 Usiamo quelli definiti nel costruttore
     const hotspots = self.hotspots;
-    const scene = self.player.vr().scene;
 
     hotspots.forEach((hotspot) => {
       if (!hotspot.type || !hotspot.type.library) return;
@@ -123,42 +182,76 @@ H5P.Video360Interactive = (function ($, EventDispatcher) {
         { parent: self }
       );
 
-      const imagePath = hotspot.hotspotType === 'dynamic' ? H5P.getPath('marker-dynamic.png', self.contentId) : H5P.getPath('marker-static.png', self.contentId);
-      const textureLoader = new THREE.TextureLoader();
-      textureLoader.load(imagePath, (texture) => {
-        const material = new THREE.SpriteMaterial({ map: texture, transparent: true});
-        const sprite = new THREE.Sprite(material);
-        sprite.scale.set(30, 30, 1);
-        sprite.name = `hotspot_marker_${hotspot.id}`;
-        sprite.userData = {
-          hotspotId: hotspot.id,
-          hotspotType: hotspot.hotspotType,
-          startTime: hotspot.displayStartTime,
-          endTime: hotspot.displayEndTime,
-          keyframes: hotspot.keyframes,
-          title: hotspot.title || 'Hotspot',
-          library: hotspot.type.library
-        };
-
-        // Events
-        sprite.on('click', () => self.handleHotspotClick(hotspot.id));
-        sprite.on('mouseover', (event) => self.showHotspotOverlay(event, sprite.userData));
-        sprite.on('mouseout', () => self.hideHotspotOverlay());
-
-        scene.add(sprite);
-        self.hotspotMeshes[hotspot.id] = sprite;
-
-        if (hotspot.hotspotType === 'dynamic') {
-          self.dynamicHotspots[hotspot.id] = sprite;
-          sprite.userData.keyframes.sort((a, b) => a.time - b.time);
-        } else if (hotspot.hotspotType === 'static') {
-          self.updateStaticPosition(sprite, hotspot);
-        }
+      // 🔹 Creazione marker sferico
+      const color = hotspot.hotspotType === 'dynamic' ? 0x00ff00 : 0xff0000;
+      const geometry = new THREE.SphereGeometry(15, 16, 16);
+      const material = new THREE.MeshBasicMaterial({ 
+        color,
+        depthTest: false,
+        depthWrite: false
       });
+      const sphere = new THREE.Mesh(geometry, material);
+
+      sphere.name = `hotspot_marker_${hotspot.id}`;
+      sphere.userData = {
+        hotspotId: hotspot.id,
+        hotspotType: hotspot.hotspotType,
+        startTime: hotspot.displayStartTime,
+        endTime: hotspot.displayEndTime,
+        keyframes: hotspot.keyframes,
+        yaw: hotspot.yaw,
+        pitch: hotspot.pitch,
+        title: hotspot.title || 'Hotspot',
+        library: hotspot.type.library
+      };
+
+      scene.add(sphere);
+      self.hotspotMeshes[hotspot.id] = sphere;
+
+      if (hotspot.hotspotType === 'dynamic') {
+        self.dynamicHotspots[hotspot.id] = sphere;
+        sphere.userData.keyframes.sort((a, b) => a.time - b.time);
+        const firstKF = sphere.userData.keyframes[0];
+        self.updateStaticPosition(sphere, firstKF);
+      } else if (hotspot.hotspotType === 'static') {
+        self.updateStaticPosition(sphere, hotspot);
+      }
     });
 
     self.updateAllHotspotPositions(0);
   }
+
+  V360Interactive.prototype.handleRaycastEvent = function (event, type) {
+    const self = this;
+    if (!self.$domElement) return;
+
+    // Calcola coordinate normalizzate del mouse (-1 a 1)
+    const rect = self.$domElement.getBoundingClientRect();
+    self.mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+    self.mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+
+    // Raycaster dalla camera VR
+    self.raycaster.setFromCamera(self.mouse, self.player.vr().camera);
+
+    // Controlla intersezioni con tutti i marker
+    const meshes = Object.values(self.hotspotMeshes);
+    const intersects = self.raycaster.intersectObjects(meshes, false);
+
+    if (intersects.length > 0) {
+      const mesh = intersects[0].object;
+      const data = mesh.userData;
+
+      if (type === 'click') {
+        self.handleHotspotClick(data.hotspotId);
+      } 
+      else if (type === 'hover') {
+        self.showHotspotOverlay(event, data);
+      }
+    } else if (type === 'hover') {
+      self.hideHotspotOverlay();
+    }
+  };
+
 
   V360Interactive.prototype.updateStaticPosition = function (mesh, hotspot) {
     const self = this;
@@ -188,7 +281,7 @@ H5P.Video360Interactive = (function ($, EventDispatcher) {
 
   V360Interactive.prototype.handleHotspotVisibility = function () {
     const self = this;
-    const currentTime = self.player.currentTime;
+    const currentTime = self.player.currentTime();
     if (!self.hotspotMeshes) return;
 
     Object.keys(self.hotspotMeshes).forEach(hotspotId => {
@@ -205,7 +298,7 @@ H5P.Video360Interactive = (function ($, EventDispatcher) {
 
   V360Interactive.prototype.handleDynamicHotspotInterpolation = function () {
     const self = this;
-    const currentTime = self.player.currentTime;
+    const currentTime = self.player.currentTime();
     self.updateAllHotspotPositions(currentTime)
   }
 
