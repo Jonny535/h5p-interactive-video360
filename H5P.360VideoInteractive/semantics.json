@@ -1,0 +1,201 @@
+[
+  {
+    "name": "videoSettings",
+    "type": "group",
+    "label": "Impostazioni Video",
+    "importance": "high",
+    "description": "Definisci e carica il video di sfondo a 360° per il tuo contenuto.",
+    "fields": [
+      {
+        "name": "video",
+        "type": "video",
+        "label": "Aggiungi un video equirettangolare",
+        "description": "Carica il tuo video equirettangolare in formato MP4. Questo formato è ampiamente supportato, ma per garantire la massima compatibilità con tutti i browser e dispositivi (incluse quelli che non supportano MP4), è fortemente consigliato fornire anche una versione WebM. Assicurati che il video sia in formato equirettangolare (proiezione 360°) per una corretta visualizzazione nel player.",
+        "importance": "high",
+        "min": 1,
+        "max": 1
+      },
+      {
+        "name": "videoTitle",
+        "type": "text",
+        "label": "Titolo del contenuto",
+        "description": "Titolo per il tuo video interattivo a 360°.",
+        "default": "Nuovo Video 360°",
+        "optional": false,
+        "importance": "high"
+      }
+    ]
+  },
+  {
+    "name": "interactionSettings",
+    "type": "group",
+    "label": "Impostazioni Interazioni",
+    "importance": "high",
+    "fields": [
+      {
+        "name": "videoPlayerPreview",
+        "type": "group",
+        "widget": "video360player",
+        "label": "Anteprima Video 360°",
+        "description": "Usa questa anteprima per posizionare le interazioni cliccando sul video.",
+        "optional": true,
+        "default": {},
+        "fields": []
+      },
+      {
+        "name": "addHotspot",
+        "type": "group",
+        "widget": "hotspoticon",
+        "label": "Aggiungi interazione",
+        "optional": false,
+        "default": {},
+        "fields": [
+          {
+            "name": "hotspots",
+            "type": "list",
+            "label": "Interazioni video",
+            "entity": "hotspot",
+            "min": 0,
+            "fields": [
+              {
+                "name": "id",
+                "type": "text",
+                "label": "ID Hotspot",
+                "default": "",
+                "optional": true,
+                "widget": "none"
+              },
+              {
+                "name": "title",
+                "type": "text",
+                "label": "Titolo Interazione",
+                "default": "Nuova interazione",
+                "optional": true
+              },
+              {
+                "name": "hotspotType",
+                "type": "select",
+                "label": "Tipo di Hotspot",
+                "description": "Scegli se l'hotspot è statico (posizione fissa) o dinamico (può essere riposizionato).",
+                "default": "static",
+                "options": [
+                  {
+                    "value": "static",
+                    "label": "Statico"
+                  },
+                  {
+                    "value": "dynamic",
+                    "label": "Dinamico"
+                  }
+                ]
+              },
+              {
+                "name": "yaw",
+                "type": "number",
+                "label": "Yaw (Gradi)",
+                "description": "Posizione orizzontale sull'asse 360° (-180 a 180).",
+                "min": -180,
+                "max": 180,
+                "default": 0
+              },
+              {
+                "name": "pitch",
+                "type": "number",
+                "label": "Pitch (Gradi)",
+                "description": "Posizione verticale dell'interazione in gradi (-90 a 90).",
+                "min": -90,
+                "max": 90,
+                "default": 0
+              },
+              {
+                "name": "displayStartTime",
+                "type": "number",
+                "label": "Ora di inizio visualizzazione (M:SS)",
+                "description": "Specifica il momento in cui l'hotspot deve apparire nel video.",
+                "min": 0,
+                "default": 0
+              },
+              {
+                "name": "displayEndTime",
+                "type": "number",
+                "label": "Ora di fine visualizzazione (M:SS)",
+                "description": "Specifica il momento in cui l'hotspot deve scomparire nel video.",
+                "min": 0,
+                "default": 0
+              },
+              {
+                "name": "positioned",
+                "type": "boolean",
+                "label": "Posizionato",
+                "default": false,
+                "optional": true,
+                "widget": "none"
+              },
+              {
+                "name": "interpolated",
+                "type": "boolean",
+                "label": "Interpolato",
+                "default": false,
+                "optional": true,
+                "widget": "none"
+              },
+              {
+                "name": "keyframes",
+                "type": "list",
+                "label": "Keyframes",
+                "description": "Definisci i keyframes per il movimento dell'hotspot dinamico.",
+                "entity": "keyframe",
+                "optional": true,
+                "default": [],
+                "fields": [
+                  {
+                    "name": "time",
+                    "type": "number",
+                    "label": "Tempo (secondi)",
+                    "default": 0
+                  }, 
+                  {
+                    "name": "yaw",
+                    "type": "number",
+                    "label": "Yaw (Gradi)",
+                    "default": 0
+                  },
+                  {
+                    "name": "pitch",
+                    "type": "number",
+                    "label": "Pitch (Gradi)",
+                    "default": 0
+                  },
+                  {
+                    "name": "positioned",
+                    "type": "boolean",
+                    "label": "Posizionato",
+                    "default": false
+                  }
+                ]
+              },
+              {
+                "name": "type",
+                "type": "library",
+                "label": "Tipo di interazione",
+                "description": "Scegli il tipo di contenuto H5P da usare come interazione.",
+                "optional": false,
+                "default": {
+                  "library": "H5P.Nil 1.0",
+                  "params": {}
+                },
+                "options": [
+                  "H5P.Nil 1.0",
+                  "H5P.Text 1.1",
+                  "H5P.Table 1.2",
+                  "H5P.Link 1.3",
+                  "H5P.Image 1.1"
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

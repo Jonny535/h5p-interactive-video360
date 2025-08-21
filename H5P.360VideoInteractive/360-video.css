@@ -1,0 +1,156 @@
+.h5p-360video-wrapper {
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  box-sizing: border-box;
+  font-family: 'Segoe UI', sans-serif;
+  margin: 0 auto;
+  max-width: 960px;
+  padding: 20px;
+  width: 100%;
+}
+
+.h5p-360video-title {
+  color: #333;
+  font-size: 1.8em;
+  margin-bottom: 20px;
+  padding-left: 36px;
+  position: relative;
+}
+
+.h5p-video360-player-container {
+  background-color: #000;
+  border-radius: 6px;
+  box-sizing: border-box;
+  height: 500px;
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+}
+
+.h5p-video360-player-container video {
+  border-radius: 6px;
+  box-sizing: border-box;
+  display: block;
+  height: 100% !important;
+  left: 0;
+  margin: 0;
+  padding: 0;
+  position: absolute;
+  top: 0;
+  transform: none !important;
+  width: 100%;
+}
+
+.vjs-vr {
+  box-sizing: border-box;
+  height: 100% !important;
+  left: 0;
+  overflow: hidden;
+  position: absolute !important;
+  top: 0;
+  width: 100% !important;
+}
+
+.h5p-360video-no-video {
+  background-color: #ffe0e0;
+  border-radius: 6px;
+  border: 1px solid #f5c2c2;
+  color: #a00;
+  font-size: 1.1em;
+  padding: 20px;
+  text-align: center;
+}
+
+/* Overlay hotspot */
+.h5p-hotspot-overlay {
+  position: absolute;
+  background: rgba(0, 0, 0, 0.85);
+  color: #fff;
+  padding: 10px 14px;
+  border-radius: 6px;
+  font-size: 0.95em;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+  z-index: 9999;
+  pointer-events: none;
+  max-width: 240px;
+  line-height: 1.4;
+}
+
+/* Modale hotspot */
+.h5p-hotspot-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.7);
+  z-index: 9998;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Contenuto modale */
+.h5p-hotspot-modal-content {
+  background: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  max-width: 800px;
+  width: 90%;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+  position: relative;
+  animation: fadeIn 0.3s ease-out;
+}
+
+/* Bottone chiusura modale */
+.h5p-hotspot-modal-close {
+  position: absolute;
+  top: 12px;
+  right: 16px;
+  font-size: 1.8em;
+  color: #333;
+  cursor: pointer;
+  font-weight: bold;
+  transition: color 0.2s ease;
+}
+
+.h5p-hotspot-modal-close:hover {
+  color: #d00;
+}
+
+/* Wrapper contenuto H5P */
+.h5p-hotspot-content-wrapper {
+  margin-top: 40px;
+}
+
+/* Animazione modale */
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .h5p-360video-wrapper {
+    padding: 10px;
+  }
+
+  .h5p-360video-title {
+    font-size: 1.4em;
+    padding-left: 30px;
+  }
+
+  .h5p-video360-player-container {
+    height: 300px;
+  }
+
+  .h5p-hotspot-modal-content {
+    padding: 16px;
+  }
+
+  .h5p-hotspot-content-wrapper {
+    margin-top: 20px;
+  }
+}
+

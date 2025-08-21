@@ -1,0 +1,322 @@
+.h5p-hotspot-editor-container {
+  background-color: #f7f3f3;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  box-shadow: 0 6px 7px rgba(0,0,0,0.25);
+  font-family: 'Inter', sans-serif;
+  margin-top: 1.5rem;
+  padding: 1rem;
+}
+
+.h5p-hotspot-label {
+  color: #333;
+  font-size: 1.5em;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.h5p-hotspot-description {
+  color: #777;
+  font-size: 0.9em;
+  margin-bottom: 1rem;
+  line-height: 1.5;
+}
+
+.h5p-hotspot-add-button.h5p-editor-button {
+  background-color: #28a745;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  margin-bottom: 1.5rem;
+}
+.h5p-hotspot-add-button.h5p-editor-button:hover {
+  background-color: #218838;
+}
+
+.h5p-editor-button {
+  align-items: center;
+  background-color: #007bff;
+  border: none;
+  border-radius: 6px;
+  color: white;
+  cursor: pointer;
+  display: flex;
+  font-size: 0.9rem;
+  gap: 0.5rem;
+  justify-content: center;
+  padding: 0.5rem 1rem;
+  transition: background-color 0.2s ease, opacity 0.2s ease, transform 0.1s ease;
+}
+.h5p-editor-button:hover:not([disabled]) {
+  background-color: #0056b3;
+  transform: translateY(-1px);
+}
+.h5p-editor-button:active:not([disabled]) {
+  transform: translateY(0);
+}
+.h5p-editor-button[disabled] {
+  background-color: #cccccc;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.h5p-hotspot-empty-message {
+  border-top: 1px solid #f0f0f0;
+  color: #999;
+  font-style: italic;
+  padding: 1rem;
+  padding-top: 0.5rem;
+  text-align: center;
+}
+
+.h5p-hotspot-list {
+  border-top: 1px solid #f0f0f0;
+  list-style: none;
+  margin-top: 1.5rem;  
+  padding: 0;
+  padding-top: 0.5rem;
+}
+
+.h5p-hotspot-list-item {
+  background-color: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 0.75rem;
+  padding: 1rem;
+  position: relative;
+}
+
+.h5p-hotspot-list-header {
+  align-items: center;
+  display: flex;
+  gap: 1rem;
+  justify-content: space-between;
+}
+
+.h5p-hotspot-title-input {
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-sizing: border-box;
+  flex-grow: 1;
+  font-size: 1em;
+  padding: 0.5rem;
+}
+
+.h5p-hotspot-delete-button.h5p-editor-button {
+  background-color: #dc3545;
+  width: 38px;
+  height: 38px;
+  margin-top: 0;
+  padding: 0;
+}
+.h5p-hotspot-delete-button.h5p-editor-button:hover {
+  background-color: #c82333;
+}
+
+.h5p-hotspot-type-container {
+  align-items: center;
+  display: flex;
+  gap: 0.5rem;
+}
+
+.h5p-hotspot-type-container span {
+  color: #555;
+  font-weight: 600;
+  min-width: 100px;
+}
+
+.h5p-hotspot-type-select-dropdown {
+  background-color: #f8f9fa;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-sizing: border-box;
+  flex-grow: 1;
+  font-size: 1em;
+  padding: 0.5rem;
+}
+
+.h5p-hotspot-static-fields-group, .h5p-hotspot-dynamic-fields-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.h5p-hotspot-coords-container {
+  display: flex;
+  gap: 1rem;
+}
+
+.h5p-hotspot-coords-container > div {
+  background-color: #e9ecef;
+  border-radius: 4px;
+  font-size: 0.9em;
+  padding: 0.5rem 0.75rem;
+}
+
+.h5p-hotspot-coords-container span {
+  color: #555;
+  font-weight: 600;
+  margin-right: 0.5rem;
+}
+
+.h5p-hotspot-time-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.h5p-hotspot-time-container > div {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.h5p-hotspot-time-container span {
+  color: #555;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.h5p-hotspot-time-input {
+  background-color: #f8f9fa;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  flex-grow: 1;
+  font-size: 1em;
+  padding: 0.5rem;
+}
+
+.h5p-hotspot-time-error {
+  color: red; 
+  display: none;
+}
+
+.h5p-hotspot-content-type-select-group {
+  align-items: center;
+  display: flex;
+  gap: 0.5rem;
+}
+
+.h5p-hotspot-content-type-select-group span {
+  color: #555;
+  font-weight: 600;
+  min-width: 100px;
+}
+
+.h5p-hotspot-content-type-select {
+  background-color: #f8f9fa;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1em;
+  flex-grow: 1;
+  padding: 0.5rem;
+}
+
+.h5p-hotspot-keyframes-container {
+  background-color: #f8f9fa;
+  border: 1px dashed #ccc;
+  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0.75rem;
+}
+
+.h5p-hotspot-keyframes-container > span {
+  color: #333;
+  font-weight: 600;
+}
+
+.h5p-hotspot-keyframe-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: #e9ecef;
+  padding: 0.5rem 0.75rem;
+  border-radius: 3px;
+  font-size: 0.9em;
+}
+
+.h5p-hotspot-keyframe-item button {
+  padding: 0.2rem 0.5rem;
+}
+
+.h5p-keyframe-position-button {
+  background-color: #17a2b8;
+}
+.h5p-keyframe-position-button:hover:not([disabled]) {
+  background-color: #138496;
+}
+
+.h5p-hotspot-interpolate-button {
+  background-color: #6c757d;
+  width: 100%;
+}
+.h5p-hotspot-interpolate-button:hover:not([disabled]) {
+  background-color: #5a6268;
+}
+
+.h5p-hotspot-content-editor-container {
+  align-items: center;
+  background-color: #f0f8ff;
+  border: 1px dashed #ddd;
+  border-radius: 5px;
+  display: flex;
+  justify-content: center;
+  padding: 1rem;
+  min-height: 50px;
+}
+
+.h5p-hotspot-content-editor-container em {
+  color: #888;
+  font-style: italic;
+  text-align: center;
+}
+
+.h5p-hotspot-keyframe-buttons {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.h5p-hotspot-details-wrapper {
+  background: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 10px;
+  margin-top: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.h5p-hotspot-toggle-button {
+  align-items: center;
+  display: flex;
+  width: 100%;
+  text-align: center;
+  border: none;
+  border-radius: 6px;
+  padding: 6px;
+  justify-content: center;
+  margin-top: 6px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.h5p-hotspot-toggle-button:hover {
+  background: #dcdcdc;
+}
+
+.h5p-hotspot-toggle-button i {
+  transition: transform 0.2s ease;
+}
+.h5p-hotspot-toggle-button i.fa-chevron-down {
+  transform: rotate(180deg);
+}
+.h5p-hotspot-toggle-button i.fa-chevron-up {
+  transform: rotate(180deg);
+}

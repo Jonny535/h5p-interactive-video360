@@ -1,0 +1,82 @@
+{
+  "title": "360 Video Interactive Editor",
+  "machineName": "H5PEditor.Video360Interactive",
+  "majorVersion": 1,
+  "minorVersion": 0,
+  "patchVersion": 78,
+  "runnable": 0,
+  "author": "Jonathan Casadei",
+  "license": "MIT",
+  "preloadedJs": [
+    {
+      "path": "vendor/video.min.js"
+    },
+    {
+      "path": "vendor/three.min.js"
+    },
+    {
+      "path": "vendor/videojs-vr.min.js"
+    },
+    {
+      "path": "vendor/opencv.js"
+    },
+    {
+      "path": "360-editor-video.js"
+    },
+    {
+      "path": "360-editor-hotspot.js"
+    },
+    {
+      "path": "vendor/tf.min.js"
+    }
+  ],
+  "preloadedCss": [
+    {
+      "path": "vendor/video-js.css"
+    },
+    {
+      "path": "360-editor-video.css"
+    },
+    {
+      "path": "360-editor-hotspot.css"
+    }
+  ],
+  "preloadedDependencies": [
+    {
+      "machineName": "H5P.Video",
+      "majorVersion": 1,
+      "minorVersion": 6
+    },
+    {
+      "machineName": "FontAwesome",
+      "majorVersion": 4,
+      "minorVersion": 5
+    },
+    {
+      "machineName": "H5P.Image",
+      "majorVersion": 1,
+      "minorVersion": 1
+    },
+    {
+      "machineName": "H5P.Text",
+      "majorVersion": 1,
+      "minorVersion": 1
+    },
+    {
+      "machineName": "H5P.Table",
+      "majorVersion": 1,
+      "minorVersion": 2
+    },
+    {
+      "machineName": "H5P.Link",
+      "majorVersion": 1,
+      "minorVersion": 3
+    },
+    {
+      "machineName": "H5P.Nil",
+      "majorVersion": 1,
+      "minorVersion": 0
+    }
+  ],
+  "saveContentState": true
+}
